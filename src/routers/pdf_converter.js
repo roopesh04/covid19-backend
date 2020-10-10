@@ -35,7 +35,7 @@ file.post('/upload',async(req,res,next)=>{
     })
     var file = "./output/file.pdf"
 
-    res.status(200).download(file)
+    res.download(file)
 
 }
 } catch (err) {

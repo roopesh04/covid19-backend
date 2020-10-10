@@ -81,7 +81,7 @@ router.post('/csv_file',async(req,res)=>{
     }
 })
 
-router.post('/get_filtered_data',(req,res)=>{
+router.post('/get_filtered_data',async(req,res)=>{
     const body=req.body
     const StartingDate=body["start"]
     const EndingDate=body["end"]
@@ -89,34 +89,37 @@ router.post('/get_filtered_data',(req,res)=>{
 
     var allthedates=getDates(new Date(StartingDate["year"],StartingDate["month"],StartingDate["day"]),new Date(EndingDate["year"],EndingDate["month"],EndingDate["day"]))
 
-    filter={
-        reportedOn:{
-            $in:allthedates
-        }
-    }
-    console.log(filter)
-    // Data.find(filter,function(err,result){
-    //     if(err){
-    //         return err
-    //     }else{
-    //         console.log(result)
-    //     }
-    // })
-    // for (let index=0;index<allthedates.length;index++){
-    //     filter['reportedOn']=allthedates[index]
-    //     console.log(filter)
-    //     Data.find(filter,function(err,result){
-    //         if(err){
-    //             return err
-    //         }
-    //         else{
-    //             console.log(result)
-    //             return result
-    //         }
-    //     })
-    // }
+    const filtered_data=await Data.findbythedetails(allthedates,filter)
+
+    output_data=[]
     
-    res.send()
+    allthedates.forEach(element=>{
+        const Recovered=0
+        const Hospitalized=0
+        const Deceased=0
+        var i=0
+        filtered_data[i].forEach(inner_element=>{
+            if(inner_element=="Recovered"){
+                Recovered=Recovered+1
+            }
+            if(inner_element=="Hospitalized"){
+                Hospitalized=Hospitalized+1
+            }
+            if(inner_element=="Deceased"){
+                Deceased=Deceasedd+1
+            }
+        })
+        seperate_data={
+            "Recovered":Recovered,
+            "Hospitalized":Hospitalized,
+            "Deceased":Deceased,
+            "Date":element
+        }
+        output_data.push(seperate_data)
+        i=i+1
+    })
+    console.log(output_data)
+    res.send(output_data)
 })
 
 module.exports=router

@@ -44,6 +44,16 @@ const dataSchema=new mongoose.Schema({
     timestamps:true
 })
 
-const Date=mongoose.model('Data',dataSchema)
+dataSchema.statics.findbythedetails=async(list,filter)=>{
+    var finalData=[]
 
-module.exports=Date
+    list.forEach(element => {
+        filter["reportedOn"]=element
+        finalData.push(Data.find(filter))
+    });
+    return Promise.all(finalData)
+}
+
+const Data=mongoose.model('Data',dataSchema)
+
+module.exports=Data
