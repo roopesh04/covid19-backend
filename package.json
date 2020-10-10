@@ -1,0 +1,26 @@
+{
+  "name": "Vithack2020",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "custom-env": "^2.0.1",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "express-fileupload": "^1.2.0",
+    "file-type": "^15.0.1",
+    "hummus": "^1.0.110",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.10.9",
+    "nodemon": "^2.0.4",
+    "request": "^2.88.2",
+    "validator": "^13.1.17"
+  }
+}
