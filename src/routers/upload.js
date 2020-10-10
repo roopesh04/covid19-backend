@@ -97,7 +97,6 @@ router.post('/get_filtered_data',async(req,res)=>{
         let Hospitalized=0
         let Deceased=0
         
-        console.log(filtered_data[i])
         filtered_data[i].forEach(inner_element=>{
             if(inner_element["status"]==="Recovered"){
                 Recovered=Recovered+1
