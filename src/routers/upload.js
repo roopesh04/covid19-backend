@@ -118,7 +118,6 @@ router.post('/get_filtered_data',async(req,res)=>{
         output_data.push(seperate_data)
         i=i+1
     })
-    console.log(output_data)
     res.send(output_data)
 })
 
