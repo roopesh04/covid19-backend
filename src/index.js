@@ -12,8 +12,8 @@ app.use(express.json())
 app.use(dataRouter)
 app.use(uploadRouter)
 
-app.get("/",async(req,res)=>{
-    res.send("Hello")
+app.get('/',function(req,res){
+    res.send("It is working")
 })
 
 app.listen(port,()=>{
