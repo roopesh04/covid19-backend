@@ -12,6 +12,10 @@ app.use(express.json())
 app.use(dataRouter)
 app.use(uploadRouter)
 
+app.get("/",async(req,res)=>{
+    res.send("Hello")
+})
+
 app.listen(port,()=>{
     console.log("Server is up on the port "+port)
 })
