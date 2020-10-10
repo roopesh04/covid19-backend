@@ -90,23 +90,26 @@ router.post('/get_filtered_data',async(req,res)=>{
     var allthedates=getDates(new Date(StartingDate["year"],StartingDate["month"],StartingDate["day"]),new Date(EndingDate["year"],EndingDate["month"],EndingDate["day"]))
 
     const filtered_data=await Data.findbythedetails(allthedates,filter)
-
     output_data=[]
-    
+    let i=0
     allthedates.forEach(element=>{
-        const Recovered=0
-        const Hospitalized=0
-        const Deceased=0
-        var i=0
+        let Recovered=0
+        let Hospitalized=0
+        let Deceased=0
+        
+        console.log(filtered_data[i])
         filtered_data[i].forEach(inner_element=>{
-            if(inner_element=="Recovered"){
+            if(inner_element["status"]==="Recovered"){
                 Recovered=Recovered+1
+                console.log(Recovered)
             }
-            if(inner_element=="Hospitalized"){
+            if(inner_element["status"]==="Hospitalized"){
                 Hospitalized=Hospitalized+1
+                console.log(Hospitalized)
             }
-            if(inner_element=="Deceased"){
-                Deceased=Deceasedd+1
+            if(inner_element["status"]==="Deceased"){
+                Deceased=Deceased+1
+                console.log(Deceased)
             }
         })
         seperate_data={
