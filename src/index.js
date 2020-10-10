@@ -5,7 +5,7 @@ const dataRouter=require('./routers/upload')
 const uploadRouter=require("./routers/pdf_converter")
 
 const app=express()
-const port =3000 || process.env.PORT
+const port =process.env.PORT || 3000
 
 app.use(bodyPraser.urlencoded({extended:true}))
 app.use(express.json())
