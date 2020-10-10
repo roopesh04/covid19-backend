@@ -1,27 +1,61 @@
 const express=require('express')
 var fileupload=require('express-fileupload')
-const Data=require('../models/data')
-const filetype=require('file-type')
+const ImagesToPDF = require('images-pdf');
+var path = require('path');
+const cors = require('cors');
+const bodyParser = require('body-parser');
+const fs=require('fs')
+const morgan = require('morgan');
+const _ = require('lodash');
+const Data=require('../models/data');
+const { result, sample } = require('lodash');
 const file=new express.Router()
 
-file.use(fileupload())
+file.use(fileupload({
+    createParentPath: true
+}))
 
 file.post('/upload',async(req,res,next)=>{
-    const file=req.files.photo
-    console.log(file)
-    const buffer_data=(file.data)
+    try {
+        if(!req.files) {
+            res.send({
+                status: false,
+                message: 'No file uploaded'
+            });
+        } else {
+    let avatar = req.files.photo
 
-    res.set('content-type','image/png').send(buffer_data)
+    avatar.mv('./images/' + avatar.name);
 
-    // res.sendFile(req.files)
-    // file.mv("/uploads/"+file.name,function(err,result){
-    //     if(err)
-    //     throw err
-    //     res.send({
-    //         success:true,
-    //     message:"File uploaded",
-    //     })
+    new ImagesToPDF.ImagesToPDF().convertFolderToPDF('images/', 'output/file.pdf');
+    fs.unlink("./images/"+avatar.name,(err)=>{
+        if(err){
+            res.send(err)
+        }
+    })
+    var file = "./output/file.pdf"
+
+    res.status(200).download(file)
+
+}
+} catch (err) {
+res.status(500).send(err);
+}
+
+
+    // const buffer_data=(file.data)
+
+    // file.mv("/images/"+file.name,function(err,result){
+    //     if(err){
+    //         res.send(err)
+    //     }else{
+    //         sucess:"File uploaded"
+    //     }
     // })
+
+    // res.set('content-type','image/png').send(buffer_data)
+
+    
 })
 
 file.get('/getdata',async(req,res)=>{

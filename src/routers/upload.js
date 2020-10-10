@@ -2,6 +2,41 @@ const express=require('express')
 const Data=require('../models/data')
 const router=new express.Router()
 
+var OutputData=function(filter){
+    Data.find(filter,function(err,result){
+        if(err){
+            return err
+        }
+        else{
+            console.log(result)
+            return result
+        }
+    })
+}
+
+
+// Data.find({reportedOn:"03/02/2020"},function(err,result){
+//     if(err){
+//         console.log(err)
+//     }else{
+//         console.log(result)
+//     }
+// })
+
+var getrequiredformate=function(Given_Date){
+    var year=Given_Date.getFullYear()
+    var month=Given_Date.getMonth()
+    if(month<10){
+        month="0"+month
+    }
+    var date=Given_Date.getDate()
+    if(date<10){
+        date="0"+date
+    }
+    var final_format=date+"/"+month+"/"+year
+    return final_format
+}
+
 var getDates = function(startDate, endDate) {
     var dates = [],
         currentDate = startDate,
@@ -14,7 +49,11 @@ var getDates = function(startDate, endDate) {
       dates.push(currentDate);
       currentDate = addDays.call(currentDate, 1);
     }
-    return dates;
+    fresh_date=[]
+    dates.forEach((date)=>{
+        fresh_date.push(getrequiredformate(date))
+    })
+    return fresh_date
   };
 
 router.post('/',async(req,res)=>{
@@ -42,20 +81,42 @@ router.post('/csv_file',async(req,res)=>{
     }
 })
 
-router.post('/get_filtered_data',async(req,res)=>{
-    const data=req.body
-    console.log(data)
-    const StartingDate=data["start"]
-    const EndingDate=data["end"]
+router.post('/get_filtered_data',(req,res)=>{
+    const body=req.body
+    const StartingDate=body["start"]
+    const EndingDate=body["end"]
+    const filter=body["filter"]
 
     var allthedates=getDates(new Date(StartingDate["year"],StartingDate["month"],StartingDate["day"]),new Date(EndingDate["year"],EndingDate["month"],EndingDate["day"]))
-    console.log(allthedates)
 
-    try{
-        res.send(allthedates)
-    }catch(e){
-        res.send(e)
+    filter={
+        reportedOn:{
+            $in:allthedates
+        }
     }
+    console.log(filter)
+    // Data.find(filter,function(err,result){
+    //     if(err){
+    //         return err
+    //     }else{
+    //         console.log(result)
+    //     }
+    // })
+    // for (let index=0;index<allthedates.length;index++){
+    //     filter['reportedOn']=allthedates[index]
+    //     console.log(filter)
+    //     Data.find(filter,function(err,result){
+    //         if(err){
+    //             return err
+    //         }
+    //         else{
+    //             console.log(result)
+    //             return result
+    //         }
+    //     })
+    // }
+    
+    res.send()
 })
 
 module.exports=router
