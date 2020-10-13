@@ -1,21 +1,34 @@
 const express=require("express")
 require('./db/mongoose')
 const morgan = require('morgan');
-const bodyPraser=require('body-parser')
+const bodyParser=require('body-parser')
 const dataRouter=require('./routers/upload')
 const uploadRouter=require("./routers/pdf_converter")
+const exphbs = require('express-handlebars');
+var cors = require('cors')
 
 const app=express()
 app.use(morgan('dev'));
-const port =process.env.PORT || 3000
+const port =process.env.PORT || 3001
 
-app.use(bodyPraser.urlencoded({extended:true}))
-app.use(express.json())
+//Static Folder
+app.use('/public', express.static('.../VIT-Hack-Front/public'))
+
+
+//Body Parser Middleware
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json())
+
 app.use(dataRouter)
 app.use(uploadRouter)
 
+
 app.get('/',function(req,res){
     res.send("It is working")
+})
+
+app.post('/send',(req,res)=>{
+  console.log(req.body);
 })
 
 app.listen(port,()=>{
